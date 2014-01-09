@@ -25,44 +25,36 @@ action :enable do
 end
 
 action :disable do
-  begin
     converge_by("Disabling #{new_resource}") do
       disable_service
     end
-  end
 end
 
 action :start do
-  begin
     converge_by("Starting #{ new_resource }") do
       result = supervisorctl('start')
       if !result.match(/#{new_resource.name}: started$/)
         Chef::Log.info "Supervisor service #{new_resource.name} was unable to be started: #{result}"
       end
     end
-  end
 end
 
 action :stop do
-  begin
     converge_by("Stopping #{ new_resource }") do
       result = supervisorctl('stop')
       if !result.match(/#{new_resource.name}: stopped$/)
         Chef::Log.info "Supervisor service #{new_resource.name} was unable to be stopped: #{result}"
       end
     end
-  end
 end
 
 action :restart do
-  begin
     converge_by("Restarting #{ new_resource }") do
       result = supervisorctl('restart')
       if !result.match(/^#{new_resource.name}: started$/)
         Chef::Log.info "Supervisor service #{new_resource.name} was unable to be started: #{result}"
       end
     end
-  end
 end
 
 def enable_service
